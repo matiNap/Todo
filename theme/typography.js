@@ -4,7 +4,7 @@ const scaleFont = size => size * PixelRatio.getFontScale();
 
 export default {
   fonts: {
-    primary: 'prompt',
+    primary: 'rubik',
   },
   fontWeight: {
     bold: 'bold',
@@ -14,7 +14,7 @@ export default {
     verySmall: scaleFont(13),
     small: scaleFont(15),
     normal: scaleFont(18),
-    medium: scaleFont(25),
-    big: scaleFont(32),
+    medium: scaleFont(22),
+    big: scaleFont(28),
   },
 };

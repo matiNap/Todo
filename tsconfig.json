@@ -5,17 +5,17 @@
     "allowJs": true,
     "paths": {
       "_actions/*": ["./actions/*"],
-      "_apis/*": ["./apis/*"],
       "_assets/*": ["./assets/*"],
       "_helpers/*": ["./helpers/*"],
       "_components/*": ["./screens/components/*"],
       "_typography": ["./theme/typography"],
-      "_palette": ["./heme/palette.ts"],
-      "_metrics": ["./theme/metrics.js"],
+      "_palette": ["./theme/palette.ts"],
+      "_metrics": ["./theme/metrics.ts"],
       "_globals": ["./theme/globals.ts"],
       "_zIndex": ["./theme/zIndex.ts"],
       "_types": ["./types/index.ts"],
-      "_rootReducer": ["./reducers/index.ts"]
+      "_rootReducer": ["./reducers/index.ts"],
+      "_firebaseConfig": ["./firebaseConfig.ts"]
     },
     "jsx": "react-native",
     "lib": ["dom", "esnext"],

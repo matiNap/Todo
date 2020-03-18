@@ -9,6 +9,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-view';
 import { store, persistor } from './store';
 import { ThemeProvider } from 'react-native-elements';
 import elementsTheme from './elementsTheme';
+import firebase from 'firebase';
+import firebaseConfig from '_firebaseConfig';
 
 console.disableYellowBox = true;
 
@@ -18,6 +20,9 @@ export default class App extends React.Component {
   };
 
   async componentDidMount() {
+    try {
+      firebase.initializeApp(firebaseConfig);
+    } catch (errr) {}
     if (!this.state.fontLoaded) {
       await Font.loadAsync({
         prompt: require('./assets/fonts/Prompt.ttf'),

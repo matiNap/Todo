@@ -1,13 +1,18 @@
-import { REHYDRATE } from 'redux-persist/es/constants';
+import { User } from 'firebase';
+import { UPDATE_USER } from '_actions/app';
 
-interface AppState {}
+interface AppState {
+  user: User | null;
+}
 
-const initState: AppState = {};
+const initState: AppState = {
+  user: null,
+};
 
 export default (state = initState, action) => {
   switch (action.type) {
-    case REHYDRATE: {
-      return { ...state };
+    case UPDATE_USER: {
+      return { ...state, user: action.payload };
     }
     default:
       return { ...state };

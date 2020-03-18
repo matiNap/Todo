@@ -6,17 +6,17 @@
         "root": ["./"],
         "alias": {
           "_types": "./types/index.ts",
-          "_apis": "./apis/",
           "_actions": "./actions/",
           "_helpers": "./helpers/",
           "_assets": "./assets/",
           "_components": "./screens/components/",
-          "_typography": "./theme/typography.js",
-          "_palette": "./theme/palette.js",
-          "_metrics": "./theme/metrics.js",
-          "_globals": "./theme/globals.js",
-          "_zIndex": "./theme/zIndex.js",
-          "_rootReducer": "./reducers/index.ts"
+          "_typography": "./theme/typography.ts",
+          "_palette": "./theme/palette.ts",
+          "_metrics": "./theme/metrics.ts",
+          "_globals": "./theme/globals.ts",
+          "_zIndex": "./theme/zIndex.ts",
+          "_rootReducer": "./reducers/index.ts",
+          "_firebaseConfig": "./firebaseConfig.ts"
         }
       }
     ]

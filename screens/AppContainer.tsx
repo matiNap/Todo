@@ -1,19 +1,48 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { connect } from 'react-redux';
+import { RootState } from '_rootReducer';
+import Main from './Main';
 
-import Screen1 from './Main/Screen1';
-import Screen2 from './Main/Screen2';
+import Auth from './Auth';
+import { User } from 'firebase';
 
 const Stack = createStackNavigator();
 
-export default () => {
+interface Props {
+  updateUser: typeof updateUser;
+  user: User;
+}
+
+const AppContainer = (props: Props) => {
+  const { user } = props;
+  console.log(user);
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="screen1" component={Screen1} />
-        <Stack.Screen name="screen2" component={Screen2} />
+        {user ? (
+          <Stack.Screen
+            name="main"
+            component={Main}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen
+            name="auth"
+            component={Auth}
+            options={{ headerShown: false }}
+          />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    user: state.app.user,
+  };
+};
+
+export default connect(mapStateToProps)(AppContainer);

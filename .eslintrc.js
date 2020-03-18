@@ -6,7 +6,6 @@ module.exports = {
     {
       root: '.',
       alias: {
-        '_apis/*': './apis/*',
         '_actions/*': './actions/*',
         '_helpers/*': './helpers/*',
         '_assets/*': './assets/*',
@@ -18,6 +17,7 @@ module.exports = {
         _globals: './theme/globals',
         _zIndex: './theme/zIndex',
         _rootReducer: './reducers/index.ts',
+        _firebaseConfig: './firebaseConfig.ts',
       },
     },
   ],
