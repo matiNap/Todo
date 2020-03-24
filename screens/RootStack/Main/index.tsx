@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import List from './List';
 import Profile from './Profile';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,7 +12,9 @@ import AddNote from './AddNote';
 
 const Tab = createBottomTabNavigator();
 
-export default () => {
+export default (props: any) => {
+  const currentRouteIndex = props?.route?.state?.index;
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => {
@@ -45,7 +47,11 @@ export default () => {
         name=" "
         component={() => null}
         options={{
-          tabBarButton: () => <AddNote />,
+          tabBarButton: () => {
+            if (currentRouteIndex !== 2) {
+              return <AddNote />;
+            } else return <View style={{ width: 60 }} />;
+          },
         }}
       />
       <Tab.Screen name="Profile" component={Profile} />

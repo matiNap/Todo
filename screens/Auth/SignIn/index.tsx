@@ -1,5 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  ActivityIndicator,
+} from 'react-native';
 // import palette from '_palette';
 import palette from '_palette';
 import typography from '_typography';
@@ -13,6 +18,7 @@ import {
   NavigationState,
 } from '@react-navigation/native';
 import firebase from 'firebase';
+import ScreenLoader from '_components/ScreenLoader';
 
 interface Props {
   navigation: NavigationProp<
@@ -29,16 +35,24 @@ class SignIn extends React.Component<Props> {
     password: '',
     email: '',
     errorMessage: null,
+    loggingIn: false,
   };
 
   login = () => {
     const { email, password } = this.state;
     if (email.length !== 0 || password.length !== 0) {
+      this.setState({ loggingIn: true });
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          this.setState({ loggingIn: false });
+        })
         .catch(error => {
-          this.setState({ errorMessage: error.message });
+          this.setState({
+            errorMessage: error.message,
+            loggingIn: false,
+          });
         });
     } else {
       this.setState({
@@ -53,12 +67,12 @@ class SignIn extends React.Component<Props> {
 
   render() {
     const { navigation } = this.props;
-    const { errorMessage, password, email } = this.state;
+    const { loggingIn, errorMessage, password, email } = this.state;
 
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView behavior="position">
-          <View style={styles.contentContainer}>
+        <View style={styles.contentContainer}>
+          <KeyboardAvoidingView behavior="position" enabled>
             <View>
               <View style={styles.titleContainer}>
                 <Text style={styles.appName}>Todo</Text>
@@ -131,8 +145,9 @@ class SignIn extends React.Component<Props> {
                 {"Don't have any account? "}
               </Text>
             </TouchableWithoutFeedback>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </View>
+        <ScreenLoader visible={loggingIn} />
       </View>
     );
   }
