@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { connect } from 'react-redux';
 import { RootState } from '_rootReducer';
-import Main from './Main';
+import Main from './RootStack';
 
 import Auth from './Auth';
 import { User } from 'firebase';
@@ -11,13 +11,12 @@ import { User } from 'firebase';
 const Stack = createStackNavigator();
 
 interface Props {
-  updateUser: typeof updateUser;
   user: User;
 }
 
 const AppContainer = (props: Props) => {
   const { user } = props;
-  console.log(user);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>

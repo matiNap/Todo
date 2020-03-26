@@ -16,7 +16,8 @@
           "_globals": "./theme/globals.ts",
           "_zIndex": "./theme/zIndex.ts",
           "_rootReducer": "./reducers/index.ts",
-          "_firebaseConfig": "./firebaseConfig.ts"
+          "_firebaseConfig": "./firebaseConfig.ts",
+          "_apis/*": "./apis/"
         }
       }
     ]

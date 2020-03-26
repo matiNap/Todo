@@ -18,6 +18,7 @@ module.exports = {
         _zIndex: './theme/zIndex',
         _rootReducer: './reducers/index.ts',
         _firebaseConfig: './firebaseConfig.ts',
+        '_apis/*': './apis/*',
       },
     },
   ],

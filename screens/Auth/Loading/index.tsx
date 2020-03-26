@@ -11,8 +11,13 @@ interface Prop {
 
 class Loading extends Component<Prop> {
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(({ email, displayName }) => {
-      this.props.updateUser({ displayName, email });
+    firebase.auth().onAuthStateChanged((userData: any) => {
+      if (userData) {
+        const { displayName, email, uid } = userData;
+        this.props.updateUser({ displayName, email, uid });
+      } else {
+        this.props.navigation.navigate('signIn');
+      }
     });
   }
 
