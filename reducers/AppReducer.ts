@@ -2,7 +2,6 @@ import * as types from '_actions/app';
 import _ from 'lodash';
 import { User } from '_types';
 import { REHYDRATE } from 'redux-persist';
-import reactotron from 'reactotron-react-native';
 
 interface AppState {
   user: User | null;

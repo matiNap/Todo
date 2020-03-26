@@ -7,18 +7,13 @@ import { useNavigation } from '@react-navigation/native';
 import { NoteInfo, Note } from '_types';
 import { connect } from 'react-redux';
 import { RootState } from '_rootReducer';
-import {
-  listenNotes,
-  removeNote,
-  syncDatabase,
-} from '_actions/creators/app';
+import { removeNote, syncDatabase } from '_actions/creators/app';
 import { SwipeableFlatList } from 'react-native-swipeable-flat-list';
 import { FontAwesome } from '@expo/vector-icons';
 import palette from '_palette';
 
 interface Props {
   notes: Note[];
-  listenNotes: typeof listenNotes;
   navgiation: any;
   removeNote: typeof removeNote;
   syncDatabase: typeof syncDatabase;
@@ -57,7 +52,6 @@ const renderDelete = (onRemove: () => void) => {
 class TodoList extends React.Component<Props> {
   componentDidMount() {
     this.props.syncDatabase();
-    // this.props.listenNotes();
   }
   render() {
     const { notes } = this.props;
@@ -101,7 +95,6 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 export default connect(mapStateToProps, {
-  listenNotes,
   removeNote,
   syncDatabase,
 })(props => {

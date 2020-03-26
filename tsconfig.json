@@ -15,7 +15,8 @@
       "_zIndex": ["./theme/zIndex.ts"],
       "_types": ["./types/index.ts"],
       "_rootReducer": ["./reducers/index.ts"],
-      "_firebaseConfig": ["./firebaseConfig.ts"]
+      "_firebaseConfig": ["./firebaseConfig.ts"],
+      "_apis/*": ["./apis/*"]
     },
     "jsx": "react-native",
     "lib": ["dom", "esnext"],

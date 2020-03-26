@@ -6,6 +6,8 @@ import idGen from 'uid';
 import firebase from 'firebase';
 import reactotron from 'reactotron-react-native';
 import 'firebase/firestore';
+import * as firestore from '../../apis/firestore';
+
 import NetInfo from '@react-native-community/netinfo';
 
 export const updateUser = (
@@ -17,13 +19,11 @@ export const updateUser = (
   });
 };
 
-export const addNote = (title: string): AppThunk => async (
-  dispatch,
-  getState,
-) => {
+export const addNote = (
+  title: string,
+): AppThunk => async dispatch => {
   const noteId = idGen();
   const date = new Date().getTime();
-  const { uid } = getState().app.user;
   try {
     dispatch({
       type: types.ADD_NOTE,
@@ -33,17 +33,11 @@ export const addNote = (title: string): AppThunk => async (
         date,
       },
     });
-    firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('notes')
-      .doc(noteId)
-      .set({
-        noteId,
-        title,
-        date,
-      });
+    firestore.getNoteRef(noteId).set({
+      noteId,
+      title,
+      date,
+    });
   } catch (error) {
     reactotron.log(error.message);
   }
@@ -56,10 +50,7 @@ export const syncDatabase = (): AppThunk => async (
   try {
     const { uid } = getState().app.user;
     const localSyncDate = getState().app.syncDate;
-    const userRef = firebase
-      .firestore()
-      .collection('users')
-      .doc(uid);
+    const userRef = firestore.getUserRef();
     const snapshot = await userRef.get();
     const data = snapshot.data();
     const serverSyncDate =
@@ -71,40 +62,41 @@ export const syncDatabase = (): AppThunk => async (
       serverSyncDate - localSyncDate <= 0
     ) {
       const { notes, points } = getState().app;
-      reactotron.log('Sync');
-      reactotron.log(notes);
-      for (const (note) of Object.values(notes)) {
+
+      for (const note of Object.values(notes)) {
         const { noteId } = note;
-        firebase
-          .firestore()
-          .collection('users')
-          .doc(uid)
-          .collection('notes')
-          .doc(noteId)
-          .update({
-            ...note,
-          });
-        const imageUri = await uploadPhoto(
-          points[noteId].imageUri,
-          uid,
-          noteId,
-          points[noteId].id,
-        );
-        reactotron.log(imageUri);
-        firebase
-          .firestore()
-          .collection('users')
-          .doc(uid)
-          .collection('notes')
-          .doc(noteId)
-          .update({
-            points: points[noteId]
-              ? {
-                  ...points[noteId],
-                  imageUri,
-                }
-              : {},
-          });
+        firestore.getNoteRef(noteId).update({
+          ...note,
+        });
+
+        for (const point of Object.values(points[noteId])) {
+          const { imageUri } = point;
+
+          if (imageUri) {
+            const remoteUri = await uploadPhoto(
+              imageUri,
+              uid,
+              noteId,
+              point.id,
+            );
+            await firestore.getNoteRef(noteId).update({
+              points: {
+                [point.id]: {
+                  ...point,
+                  imageUri: remoteUri,
+                },
+              },
+            });
+          } else {
+            if (point.id) {
+              firestore.getNoteRef(noteId).update({
+                points: {
+                  [point.id]: point,
+                },
+              });
+            }
+          }
+        }
       }
 
       const newSyncDate = new Date().getTime();
@@ -118,9 +110,10 @@ export const syncDatabase = (): AppThunk => async (
         },
       });
     } else {
+      const newSyncDate = new Date().getTime();
       if (netState.isConnected) {
         listenNotes()(dispatch, getState);
-        const newSyncDate = new Date().getTime();
+
         userRef.set({
           syncDate: newSyncDate,
         });
@@ -133,7 +126,7 @@ export const syncDatabase = (): AppThunk => async (
       });
     }
   } catch (error) {
-    console.log(error);
+    reactotron.log(error.message);
   }
 };
 
@@ -144,6 +137,7 @@ const uploadPhoto = async (
   pointId: string,
 ) => {
   const path = `photos/${uid}/${idGen()}`;
+
   const response = await fetch(uri);
   const file = await response.blob();
 
@@ -154,17 +148,13 @@ const uploadPhoto = async (
         .ref(path)
         .put(file);
 
-      firebase
-        .firestore()
-        .collection('users')
-        .doc(uid)
-        .collection('notes')
-        .doc(noteId)
-        .update({
+      firestore.getNoteRef(noteId).update({
+        points: {
           [pointId]: {
             imageUri: imageResponse.downloadURL,
           },
-        });
+        },
+      });
 
       resolve(path);
     } catch (error) {
@@ -188,8 +178,7 @@ export const addImageToPoint = (
         pointId,
       },
     });
-    const remoteUri = await uploadPhoto(uri, uid);
-    reactotron.log(`remote ${remoteUri}`);
+    await uploadPhoto(uri, uid);
   } catch (error) {
     console.log(error);
   }
@@ -274,16 +263,10 @@ export const saveNote = (noteId: string): AppThunk => async (
   const points = state.app.points[noteId];
 
   try {
-    firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('notes')
-      .doc(noteId)
-      .set({
-        ...note,
-        points,
-      });
+    firestore.getNoteRef(noteId).set({
+      ...note,
+      points,
+    });
   } catch (error) {}
 };
 
@@ -300,13 +283,7 @@ export const removeNote = (noteId: string): AppThunk => async (
         noteId,
       },
     });
-    firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('notes')
-      .doc(noteId)
-      .delete();
+    firestore.getNoteRef(noteId).delete();
   } catch (error) {
     console.log(error);
   }

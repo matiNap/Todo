@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  ActivityIndicator,
-} from 'react-native';
-// import palette from '_palette';
+import { View, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import palette from '_palette';
 import typography from '_typography';
-import { Input, Button, Text, Avatar } from 'react-native-elements';
+import { Input, Button, Text } from 'react-native-elements';
 import metrics from '_metrics';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -59,10 +53,6 @@ class SignIn extends React.Component<Props> {
         errorMessage: 'Enter password and email',
       });
     }
-  };
-
-  signInWithGoogle = () => {
-    //TODO
   };
 
   render() {
@@ -125,15 +115,6 @@ class SignIn extends React.Component<Props> {
               onPress={() => {
                 this.login();
               }}
-            />
-            <Text style={styles.orText}>or</Text>
-            <Button
-              onPress={this.signInWithGoogle}
-              title="Sign in with google"
-              buttonStyle={{
-                backgroundColor: '#fff',
-              }}
-              titleStyle={{ color: palette.text.primary }}
             />
 
             <TouchableWithoutFeedback
