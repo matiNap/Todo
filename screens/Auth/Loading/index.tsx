@@ -3,7 +3,7 @@ import { View, ActivityIndicator } from 'react-native';
 import palette from '_palette';
 import { updateUser } from '_actions/creators/app';
 import { connect } from 'react-redux';
-import firebase from 'firebase';
+import firebase from '_firebase';
 
 interface Prop {
   updateUser: typeof updateUser;

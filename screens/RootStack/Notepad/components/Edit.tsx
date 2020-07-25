@@ -16,17 +16,17 @@ import {
 } from 'react-native-gesture-handler';
 
 interface Props {
-  points: Point[];
+  points?: Point[];
   noteId: string;
-  addPoint: typeof addPoint;
-  saveNote: typeof saveNote;
+  addPoint?: typeof addPoint;
+  saveNote?: typeof saveNote;
 }
 
 class Edit extends React.Component<Props> {
   componentDidMount() {
     const { noteId } = this.props;
-    AppState.addEventListener('change', nextState => {
-      if (nextState === 'background') {
+    AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'background' && this.props.saveNote) {
         this.props.saveNote(noteId);
       }
     });
@@ -35,12 +35,13 @@ class Edit extends React.Component<Props> {
     const { points, noteId } = this.props;
     return (
       <View style={styles.container}>
-        <ScrollView>
-          {points.map(point => {
-            return (
-              <Todo key={point.id} todo={point} noteId={noteId} />
-            );
-          })}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {points &&
+            points.map((point) => {
+              return (
+                <Todo key={point.id} todo={point} noteId={noteId} />
+              );
+            })}
         </ScrollView>
 
         <View style={styles.buttonContainer}>
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: palette.secondary,
     paddingHorizontal: metrics.margin.medium,
-    paddingVertical: metrics.margin.big,
+    paddingTop: metrics.margin.medium,
   },
   icon: {
     fontSize: 40,
@@ -70,10 +71,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonContainer: {
+    position: 'absolute',
     width: 60,
     height: 60,
     borderRadius: 60,
-    position: 'absolute',
+
     bottom: 40,
     right: 40,
     backgroundColor: palette.primary,
@@ -85,15 +87,13 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
-    elevation: 5,
   },
 });
 
 const mapStateToProps = (state: RootState, ownProps: Props) => {
-  const points = state.app.points[ownProps.noteId];
+  const points = state.app.points;
   return {
-    points: points ? _.sortBy(points, ['iid']) : [],
+    points: points,
   };
 };
 

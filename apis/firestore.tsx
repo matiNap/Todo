@@ -1,18 +1,11 @@
-import firebase from 'firebase';
+import firebase from '_firebase';
 import 'firebase/firestore';
-import reactotron from 'reactotronConfig';
 
 export const getUserRef = () => {
   const { uid } = firebase.auth().currentUser;
-  reactotron.log(uid);
-  return firebase
-    .firestore()
-    .collection('users')
-    .doc(uid);
+  return firebase.firestore().collection('users').doc(uid);
 };
 
 export const getNoteRef = (noteId: string) => {
-  return getUserRef()
-    .collection('notes')
-    .doc(noteId);
+  return getUserRef().collection('notes').doc(noteId);
 };

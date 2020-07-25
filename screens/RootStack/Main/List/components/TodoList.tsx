@@ -56,7 +56,7 @@ class TodoList extends React.Component<Props> {
   render() {
     const { notes } = this.props;
     return (
-      <View>
+      <View style={styles.container}>
         <SwipeableFlatList
           keyExtractor={(item, index) => index.toString()}
           data={notes}
@@ -76,6 +76,10 @@ class TodoList extends React.Component<Props> {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: palette.secondary,
+    height: '100%',
+  },
   trashIcon: {
     fontSize: 30,
     color: palette.secondary,
@@ -97,7 +101,7 @@ const mapStateToProps = (state: RootState) => {
 export default connect(mapStateToProps, {
   removeNote,
   syncDatabase,
-})(props => {
+})((props) => {
   const navigation = useNavigation();
   return <TodoList navigation={navigation} {...props} />;
 });

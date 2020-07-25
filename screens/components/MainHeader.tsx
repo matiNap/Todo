@@ -1,24 +1,37 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Text } from 'react-native-elements';
+import metrics from '_metrics';
 import palette from '_palette';
-import { Header } from 'react-native-elements';
-import typography from '_typography';
 
 export default (props: { title: string }) => {
   const { title } = props;
   return (
-    <Header
-      containerStyle={{
-        borderBottomColor: palette.grayscale.light,
-        borderBottomWidth: 1.5,
-      }}
-      barStyle="dark-content"
-      backgroundColor={palette.secondary}
-      centerComponent={() => (
-        <Text style={{ fontSize: typography.fontSize.medium }}>
-          {title}
-        </Text>
-      )}
-    />
+    <View style={styles.container}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: palette.secondary,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: metrics.statusBarHeight + 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
+    paddingBottom: 15,
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
+});

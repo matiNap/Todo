@@ -19,6 +19,7 @@ module.exports = {
         _rootReducer: './reducers/index.ts',
         _firebaseConfig: './firebaseConfig.ts',
         '_apis/*': './apis/*',
+        _firebase: './Firebase.ts',
       },
     },
   ],

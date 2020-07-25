@@ -1,50 +1,31 @@
 import React from 'react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
-import * as Font from 'expo-font';
-import { View } from 'react-native';
-import { mapping, light as lightTheme } from '@eva-design/eva';
+import { StatusBar } from 'react-native';
 import AppContainer from './screens/AppContainer';
-import { SafeAreaProvider } from 'react-native-safe-area-view';
 import { store, persistor } from './store';
 import { ThemeProvider } from 'react-native-elements';
 import elementsTheme from './elementsTheme';
-import firebase from 'firebase';
-import firebaseConfig from '_firebaseConfig';
+import { useFonts } from '@expo-google-fonts/inter';
+import ScreenLoader from '_components/ScreenLoader';
+import { Prompt_500Medium } from '@expo-google-fonts/dev';
 
 console.disableYellowBox = true;
 
-export default class App extends React.Component {
-  state = {
-    fontLoaded: false,
-  };
-
-  async componentDidMount() {
-    try {
-      firebase.initializeApp(firebaseConfig);
-    } catch (errr) {}
-    if (!this.state.fontLoaded) {
-      await Font.loadAsync({
-        prompt: require('./assets/fonts/Prompt.ttf'),
-      });
-      this.setState({ fontLoaded: true });
-    }
+StatusBar.setTranslucent(true);
+StatusBar.setBarStyle('dark-content');
+export default () => {
+  const [fontsLoaded] = useFonts({ Prompt_500Medium });
+  if (fontsLoaded) {
+    return (
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <ThemeProvider theme={elementsTheme}>
+            <AppContainer />
+          </ThemeProvider>
+        </PersistGate>
+      </Provider>
+    );
   }
-
-  render() {
-    if (this.state.fontLoaded) {
-      return (
-        <SafeAreaProvider>
-          <Provider store={store}>
-            <PersistGate persistor={persistor}>
-              <ThemeProvider theme={elementsTheme}>
-                <AppContainer />
-              </ThemeProvider>
-            </PersistGate>
-          </Provider>
-        </SafeAreaProvider>
-      );
-    }
-    return <View />;
-  }
-}
+  return <ScreenLoader visible />;
+};

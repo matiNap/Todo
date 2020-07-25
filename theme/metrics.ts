@@ -27,4 +27,9 @@ export default {
     medium: 15,
     big: 20,
   },
+  login: {
+    svgHeight: 150,
+
+    swipe: 130,
+  },
 };

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -13,7 +13,7 @@ import {
   NavigationProp,
   NavigationState,
 } from '@react-navigation/native';
-import firebase from 'firebase';
+import firebase from '_firebase';
 import palette from '_palette';
 
 interface Props {
@@ -44,11 +44,11 @@ class SignUp extends React.Component<Props> {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(userRecord => {
+        .then((userRecord) => {
           userRecord.user?.updateProfile({ displayName: username });
           navigation.navigate('signIn');
         })
-        .catch(error => {
+        .catch((error) => {
           this.setState({ errorMessage: error.message });
         });
     } else {
@@ -67,7 +67,7 @@ class SignUp extends React.Component<Props> {
               placeholder="Email"
               autoCapitalize="none"
               keyboardType="email-address"
-              onChangeText={text => {
+              onChangeText={(text) => {
                 this.setState({ email: text });
               }}
               value={email}
@@ -75,7 +75,7 @@ class SignUp extends React.Component<Props> {
             <Input
               placeholder="Username"
               autoCapitalize="none"
-              onChangeText={text => {
+              onChangeText={(text) => {
                 this.setState({ username: text });
               }}
               value={username}
@@ -83,7 +83,7 @@ class SignUp extends React.Component<Props> {
             <Input
               placeholder="Password"
               secureTextEntry
-              onChangeText={text => {
+              onChangeText={(text) => {
                 this.setState({ password: text });
               }}
               value={password}

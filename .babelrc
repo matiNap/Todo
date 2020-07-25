@@ -10,16 +10,18 @@
           "_helpers": "./helpers/",
           "_assets": "./assets/",
           "_components": "./screens/components/",
-          "_typography": "./theme/typography.ts",
-          "_palette": "./theme/palette.ts",
-          "_metrics": "./theme/metrics.ts",
-          "_globals": "./theme/globals.ts",
-          "_zIndex": "./theme/zIndex.ts",
+          "_typography": "./theme/typography",
+          "_palette": "./theme/palette",
+          "_metrics": "./theme/metrics",
+          "_globals": "./theme/globals",
+          "_zIndex": "./theme/zIndex",
           "_rootReducer": "./reducers/index.ts",
           "_firebaseConfig": "./firebaseConfig.ts",
-          "_apis/*": "./apis/"
+          "_apis/*": "./apis/",
+          "_firebase": "./Firebase.ts"
         }
       }
     ]
-  ]
+  ],
+  "presets": ["babel-preset-expo"]
 }

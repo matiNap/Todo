@@ -1,14 +1,9 @@
 {
   "expo": {
-    "name": "MyBoilerplate",
-    "slug": "MatiBoilerplate",
+    "name": "Todo app",
+    "slug": "TodoApp",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,11 +15,17 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "androidStatusBar": {
+      "barStyle": "dark-content",
+      "translucent": true
+    },
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "mati.todo.app",
+      "versionCode": 1
     }
   }
 }
