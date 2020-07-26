@@ -16,7 +16,8 @@
       "_types": ["./types/index.ts"],
       "_rootReducer": ["./reducers/index.ts"],
       "_firebaseConfig": ["./firebaseConfig.ts"],
-      "_apis/*": ["./apis/*"]
+      "_apis/*": ["./apis/*"],
+      "_firebase": ["./Firebase.ts"]
     },
     "jsx": "react-native",
     "lib": ["dom", "esnext"],

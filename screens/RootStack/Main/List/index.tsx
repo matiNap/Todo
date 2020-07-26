@@ -1,15 +1,14 @@
 import React from 'react';
 import TodoList from './components/TodoList';
 import MainHeader from '_components/MainHeader';
+import { View } from 'react-native';
 
-interface Props {}
-
-const List = (props: Props) => {
+const List = () => {
   return (
-    <>
+    <View>
       <MainHeader title="Your todos" />
       <TodoList />
-    </>
+    </View>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { Header, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import { Ionicons, Entypo } from '@expo/vector-icons';
 import palette from '_palette';
 import { NoteInfo } from '_types';
@@ -10,6 +10,7 @@ import typography from '_typography';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { saveNote } from '_actions/creators/app';
+import metrics from '_metrics';
 
 interface Props {
   info: NoteInfo;
@@ -20,10 +21,7 @@ const NoteHeader = (props: Props) => {
   const { title, date, noteId } = props.info;
   const navigation = useNavigation();
   return (
-    <Header
-      containerStyle={styles.container}
-      backgroundColor={palette.secondary}
-    >
+    <View style={styles.container}>
       <TouchableWithoutFeedback
         onPress={() => {
           navigation.goBack();
@@ -46,14 +44,20 @@ const NoteHeader = (props: Props) => {
       >
         <Entypo name="check" style={styles.check} />
       </TouchableWithoutFeedback>
-    </Header>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: metrics.statusBarHeight + 5,
+    paddingHorizontal: 10,
     borderBottomColor: palette.grayscale.medium,
     borderBottomWidth: 1.5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: metrics.margin.normal,
+    alignItems: 'center',
   },
   time: {
     fontSize: typography.fontSize.verySmall,

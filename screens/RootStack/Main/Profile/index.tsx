@@ -9,7 +9,6 @@ import { User } from '_types';
 import typography from '_typography';
 import { AntDesign } from '@expo/vector-icons';
 import { logOut } from '_actions/creators/app';
-import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   user: User;
@@ -50,14 +49,12 @@ const Profile = (props: Props) => {
           key="logout"
           onPress={() => {
             props.logOut();
-            // navigation.navigate('Root');
           }}
           containerStyle={{ backgroundColor: palette.secondary }}
           key="email"
           leftIcon={() => (
             <View
               style={{
-                backgroundColor: palette.actions.warning,
                 padding: 3,
                 borderRadius: 10,
               }}
@@ -86,7 +83,7 @@ const styles = StyleSheet.create({
   },
   logOut: {
     fontSize: 25,
-    color: palette.secondary,
+    color: palette.text.primary,
   },
 });
 

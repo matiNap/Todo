@@ -2,7 +2,7 @@ import React from 'react';
 import NoteHeader from './components/NoteHeader';
 import { NoteInfo } from '_types';
 import Edit from './components/Edit';
-import reactotron from 'reactotronConfig';
+import { View } from 'react-native';
 
 interface Props {
   route: {
@@ -12,11 +12,10 @@ interface Props {
 
 export default (props: Props) => {
   const info = props.route.params;
-  reactotron.log(info);
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <NoteHeader info={info} />
       <Edit noteId={info.noteId} />
-    </>
+    </View>
   );
 };

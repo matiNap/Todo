@@ -1,7 +1,6 @@
 import { CSSProperties } from 'react';
 import palette from '_palette';
 import typography from '_typography';
-import metrics from '_metrics';
 
 const theme: {
   Text: {
@@ -18,7 +17,7 @@ const theme: {
 } = {
   Text: {
     style: {
-      fontFamily: 'prompt',
+      fontFamily: 'Prompt_500Medium',
       fontSize: typography.fontSize.normal,
       color: palette.text.primary,
     },
@@ -39,7 +38,7 @@ const theme: {
     },
   },
   Input: {
-    containerStyle: { marginVertical: metrics.margin.medium },
+    containerStyle: { marginVertical: 10 },
     inputContainerStyle: {
       borderBottomColor: palette.grayscale.medium,
     },

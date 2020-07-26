@@ -1,27 +1,26 @@
-import { User } from 'firebase';
+import { User } from '_firebase';
 import * as types from '_actions/app';
 import { AppThunk } from '_rootReducer';
-import { Point } from '_types';
 import idGen from 'uid';
-import firebase from 'firebase';
+import firebase from '_firebase';
 import reactotron from 'reactotron-react-native';
 import 'firebase/firestore';
 import * as firestore from '../../apis/firestore';
 
 import NetInfo from '@react-native-community/netinfo';
 
-export const updateUser = (
-  user: User,
-): AppThunk => async dispatch => {
+export const updateUser = (user: User): AppThunk => async (
+  dispatch,
+) => {
   dispatch({
     type: types.UPDATE_USER,
     payload: user,
   });
 };
 
-export const addNote = (
-  title: string,
-): AppThunk => async dispatch => {
+export const addNote = (title: string): AppThunk => async (
+  dispatch,
+) => {
   const noteId = idGen();
   const date = new Date().getTime();
   try {
@@ -198,7 +197,7 @@ export const listenNotes = (): AppThunk => async (
       .collection('notes');
 
     const snapshot = await notesRef.limit(20).get();
-    snapshot.docs.forEach(async snapshot => {
+    snapshot.docs.forEach(async (snapshot) => {
       dispatch({
         type: types.ADD_NOTE,
         payload: {
@@ -235,9 +234,9 @@ export const removePoint = (noteId: string, pointId: string) => ({
   },
 });
 
-export const addPoint = (
-  noteId: string,
-): AppThunk => async dispatch => {
+export const addPoint = (noteId: string): AppThunk => async (
+  dispatch,
+) => {
   const pointId = idGen();
   const data = { noteId, id: pointId };
 
@@ -289,7 +288,7 @@ export const removeNote = (noteId: string): AppThunk => async (
   }
 };
 
-export const logOut = (): AppThunk => async dispatch => {
+export const logOut = (): AppThunk => async (dispatch) => {
   try {
     dispatch({
       type: types.LOG_OUT,

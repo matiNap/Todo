@@ -42,7 +42,7 @@ class SignIn extends React.Component<Props> {
         .then(() => {
           this.setState({ loggingIn: false });
         })
-        .catch(error => {
+        .catch((error) => {
           this.setState({
             errorMessage: error.message,
             loggingIn: false,
@@ -85,7 +85,7 @@ class SignIn extends React.Component<Props> {
               keyboardType="email-address"
               autoCapitalize="none"
               value={email}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 this.setState({ email: text });
               }}
             />
@@ -101,7 +101,7 @@ class SignIn extends React.Component<Props> {
               autoCapitalize="none"
               secureTextEntry
               value={password}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 this.setState({ password: text });
               }}
             />
@@ -110,6 +110,15 @@ class SignIn extends React.Component<Props> {
             )}
             <Button
               title="Sign in"
+              type="solid"
+              buttonStyle={styles.buttonContainerStyle}
+              onPress={() => {
+                this.login();
+              }}
+            />
+
+            <Button
+              title="Enter as guest"
               type="solid"
               buttonStyle={styles.buttonContainerStyle}
               onPress={() => {

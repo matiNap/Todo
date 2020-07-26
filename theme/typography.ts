@@ -1,20 +1,16 @@
-import { PixelRatio } from 'react-native';
-
-const scaleFont = size => size * PixelRatio.getFontScale();
-
 export default {
   fonts: {
-    primary: 'prompt',
+    primary: 'Prompt_500Medium',
   },
   fontWeight: {
     bold: 'bold',
     regular: '400',
   },
   fontSize: {
-    verySmall: scaleFont(13),
-    small: scaleFont(15),
-    normal: scaleFont(18),
-    medium: scaleFont(25),
-    big: scaleFont(32),
+    verySmall: 13,
+    small: 15,
+    normal: 20,
+    medium: 24,
+    big: 30,
   },
 };
