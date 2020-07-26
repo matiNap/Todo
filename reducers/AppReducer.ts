@@ -2,29 +2,25 @@ import * as types from '_actions/app';
 import _ from 'lodash';
 import { User } from '_types';
 import { REHYDRATE } from 'redux-persist';
-import { Point } from '_types';
 
 interface AppState {
   user: User | null;
   notes: {};
-  points: Point[];
+  points: {};
   syncDate: number;
 }
 
 const initState: AppState = {
   user: null,
   notes: {},
-  points: [],
+  points: {},
   syncDate: 0,
 };
 
 export default (state = initState, action) => {
   switch (action.type) {
     case REHYDRATE: {
-      const { notes, syncDate, points } =
-        action.payload && action.payload.app
-          ? action.payload.app
-          : initState;
+      const { notes, syncDate, points } = action.payload.app;
       return { ...state, notes, points, syncDate };
     }
     case types.SYNC_DATA: {
@@ -52,36 +48,52 @@ export default (state = initState, action) => {
       };
     }
     case types.ADD_POINT: {
+      const { noteId, id } = action.payload;
+      const oldPoints = state.points[noteId]
+        ? state.points[noteId]
+        : [];
       return {
         ...state,
-        points: [...state.points, action.payload],
+        points: {
+          ...state.points,
+          [noteId]: {
+            ...oldPoints,
+            [id]: {
+              title: 'new todo',
+              id,
+              done: false,
+              iid: Object.values(oldPoints).length,
+            },
+          },
+        },
       };
     }
     case types.EDIT_POINT: {
-      const { noteId, data } = action.payload;
+      const { noteId, pointId, data } = action.payload;
 
       return {
         ...state,
-        points: state.points.map((currentPoint) => {
-          if (currentPoint.id === noteId) {
-            return {
-              ...currentPoint,
+        points: {
+          ...state.points,
+          [noteId]: {
+            ...state.points[noteId],
+            [pointId]: {
+              ...state.points[noteId][pointId],
               ...data,
-            };
-          }
-          return currentPoint;
-        }),
+            },
+          },
+        },
       };
     }
     case types.REMOVE_POINT: {
-      const { pointId } = action.payload;
+      const { noteId, pointId } = action.payload;
 
       return {
         ...state,
-        points: _.remove(
-          state.points,
-          (currentPoint) => currentPoint.id === pointId,
-        ),
+        points: {
+          ...state.points,
+          [noteId]: _.omit(state.points[noteId], [pointId]),
+        },
       };
     }
     case types.REMOVE_NOTE: {
@@ -92,18 +104,19 @@ export default (state = initState, action) => {
       return { ...initState };
     }
     case types.ADD_IMAGE: {
-      const { noteId, uri } = action.payload;
+      const { noteId, pointId, uri } = action.payload;
       return {
         ...state,
-        points: state.points.map((currentPoint) => {
-          if (currentPoint.id === noteId) {
-            return {
-              ...currentPoint,
+        points: {
+          ...state.points,
+          [noteId]: {
+            ...state.points[noteId],
+            [pointId]: {
+              ...state.points[noteId][pointId],
               imageUri: uri,
-            };
-          }
-          return currentPoint;
-        }),
+            },
+          },
+        },
       };
     }
     default:

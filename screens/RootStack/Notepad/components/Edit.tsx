@@ -14,6 +14,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
+import reactotron from 'reactotronConfig';
 
 interface Props {
   points?: Point[];
@@ -91,9 +92,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootState, ownProps: Props) => {
-  const points = state.app.points;
+  const points = state.app.points[ownProps.noteId];
+
   return {
-    points: points,
+    points: points ? _.sortBy(points, ['iid']) : [],
   };
 };
 
