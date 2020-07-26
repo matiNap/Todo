@@ -6,4 +6,5 @@ export const EDIT_POINT = 'app/EDIT_POINT';
 export const REMOVE_POINT = 'app/REMOVE_POINT';
 export const LOG_OUT = 'app/LOG_OUT';
 export const ADD_IMAGE = 'app/ADD_IMAGE';
-export const SYNC_DATA = 'app/SYNC_DATa';
+export const SYNC_DATA = 'app/SYNC_DATA';
+export const LOG_OUT_GUEST = 'app/LOG_OUT_GUEST';

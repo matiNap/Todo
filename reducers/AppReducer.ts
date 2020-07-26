@@ -4,7 +4,7 @@ import { User } from '_types';
 import { REHYDRATE } from 'redux-persist';
 
 interface AppState {
-  user: User | null;
+  user: User | null | string;
   notes: {};
   points: {};
   syncDate: number;
@@ -20,8 +20,10 @@ const initState: AppState = {
 export default (state = initState, action) => {
   switch (action.type) {
     case REHYDRATE: {
-      const { notes, syncDate, points } = action.payload.app;
-      return { ...state, notes, points, syncDate };
+      if (action.payload) {
+        const { notes, syncDate, points } = action.payload.app;
+        return { ...state, notes, points, syncDate };
+      } else return { ...state };
     }
     case types.SYNC_DATA: {
       return { ...state, syncDate: action.payload.syncDate };
@@ -118,6 +120,9 @@ export default (state = initState, action) => {
           },
         },
       };
+    }
+    case types.LOG_OUT_GUEST: {
+      return { ...state, user: null };
     }
     default:
       return { ...state };

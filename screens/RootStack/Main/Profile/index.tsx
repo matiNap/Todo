@@ -9,6 +9,8 @@ import { User } from '_types';
 import typography from '_typography';
 import { AntDesign } from '@expo/vector-icons';
 import { logOut } from '_actions/creators/app';
+import globals from '_globals';
+import reactotron from 'reactotronConfig';
 
 interface Props {
   user: User;
@@ -18,33 +20,47 @@ interface Props {
 const Profile = (props: Props) => {
   if (props.user) {
     const { displayName, email } = props.user;
+    const isGuest = props.user === globals.guest;
+
     return (
       <View style={{ flex: 1, backgroundColor: palette.secondary }}>
         <MainHeader title="Profile" />
 
-        <ListItem
-          containerStyle={{ backgroundColor: palette.secondary }}
-          key="name"
-          leftAvatar={() => {
-            return <Text>Name: </Text>;
-          }}
-          title={displayName}
-          titleStyle={styles.title}
-          bottomDivider
-        />
-        <ListItem
-          containerStyle={{ backgroundColor: palette.secondary }}
-          key="email"
-          leftAvatar={() => {
-            return <Text>Email: </Text>;
-          }}
-          title={() => (
-            <Text style={styles.email} numberOfLines={1}>
-              {email}
+        {!isGuest && (
+          <ListItem
+            containerStyle={{ backgroundColor: palette.secondary }}
+            key="name"
+            leftAvatar={() => {
+              return <Text>Name: </Text>;
+            }}
+            title={displayName}
+            titleStyle={styles.title}
+            bottomDivider
+          />
+        )}
+        {!isGuest && (
+          <ListItem
+            containerStyle={{ backgroundColor: palette.secondary }}
+            key="email"
+            leftAvatar={() => {
+              return <Text>Email: </Text>;
+            }}
+            title={() => (
+              <Text style={styles.email} numberOfLines={1}>
+                {email}
+              </Text>
+            )}
+            bottomDivider
+          />
+        )}
+        {isGuest && (
+          <View style={styles.guestInfoContainer}>
+            <Text style={styles.guestInfo}>Guest account</Text>
+            <Text style={styles.guestInfo}>
+              You can only store data locally
             </Text>
-          )}
-          bottomDivider
-        />
+          </View>
+        )}
         <ListItem
           key="logout"
           onPress={() => {
@@ -84,6 +100,15 @@ const styles = StyleSheet.create({
   logOut: {
     fontSize: 25,
     color: palette.text.primary,
+  },
+  guestInfo: {
+    color: palette.grayscale.dark,
+  },
+  guestInfoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 35,
+    paddingBottom: 15,
   },
 });
 

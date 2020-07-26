@@ -11,8 +11,10 @@ import {
   NavigationProp,
   NavigationState,
 } from '@react-navigation/native';
-import firebase from 'firebase';
+import firebase from '_firebase';
 import ScreenLoader from '_components/ScreenLoader';
+import { guestLogin } from '_actions/creators/app';
+import { connect } from 'react-redux';
 
 interface Props {
   navigation: NavigationProp<
@@ -22,6 +24,7 @@ interface Props {
     {},
     {}
   >;
+  guestLogin: typeof guestLogin;
 }
 
 class SignIn extends React.Component<Props> {
@@ -122,7 +125,7 @@ class SignIn extends React.Component<Props> {
               type="solid"
               buttonStyle={styles.buttonContainerStyle}
               onPress={() => {
-                this.login();
+                this.props.guestLogin();
               }}
             />
 
@@ -207,7 +210,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default () => {
+export default connect(null, { guestLogin })((props) => {
   const navigation = useNavigation();
-  return <SignIn navigation={navigation} />;
-};
+  return <SignIn navigation={navigation} {...props} />;
+});

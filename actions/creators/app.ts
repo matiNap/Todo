@@ -8,6 +8,7 @@ import 'firebase/firestore';
 import * as firestore from '../../apis/firestore';
 
 import NetInfo from '@react-native-community/netinfo';
+import globals from '_globals';
 
 export const updateUser = (user: User): AppThunk => async (
   dispatch,
@@ -16,6 +17,13 @@ export const updateUser = (user: User): AppThunk => async (
     type: types.UPDATE_USER,
     payload: user,
   });
+};
+
+export const guestLogin = () => {
+  return {
+    type: types.UPDATE_USER,
+    payload: globals.guest,
+  };
 };
 
 export const addNote = (title: string): AppThunk => async (
@@ -46,86 +54,87 @@ export const syncDatabase = (): AppThunk => async (
   dispatch,
   getState,
 ) => {
-  try {
-    const { uid } = getState().app.user;
-    const localSyncDate = getState().app.syncDate;
-    const userRef = firestore.getUserRef();
-    const snapshot = await userRef.get();
-    const data = snapshot.data();
-    const serverSyncDate =
-      data && data.syncDate ? data.syncDate : null;
-    const netState = await NetInfo.fetch();
-    if (
-      netState.isConnected &&
-      serverSyncDate &&
-      serverSyncDate - localSyncDate <= 0
-    ) {
-      const { notes, points } = getState().app;
+  const user = getState().app.user;
+  if (user !== globals.guest) {
+    try {
+      const { uid } = user;
+      const localSyncDate = getState().app.syncDate;
+      const userRef = firestore.getUserRef();
+      const snapshot = await userRef.get();
+      const data = snapshot.data();
+      const serverSyncDate =
+        data && data.syncDate ? data.syncDate : null;
+      const netState = await NetInfo.fetch();
+      if (
+        netState.isConnected &&
+        serverSyncDate &&
+        serverSyncDate - localSyncDate <= 0
+      ) {
+        const { notes, points } = getState().app;
 
-      for (const note of Object.values(notes)) {
-        const { noteId } = note;
-        firestore.getNoteRef(noteId).update({
-          ...note,
-        });
+        for (const note of Object.values(notes)) {
+          const { noteId } = note;
+          firestore.getNoteRef(noteId).update({
+            ...note,
+          });
 
-        for (const point of Object.values(points[noteId])) {
-          const { imageUri } = point;
+          for (const point of Object.values(points[noteId])) {
+            const { imageUri } = point;
 
-          if (imageUri) {
-            const remoteUri = await uploadPhoto(
-              imageUri,
-              uid,
-              noteId,
-              point.id,
-            );
-            await firestore.getNoteRef(noteId).update({
-              points: {
-                [point.id]: {
-                  ...point,
-                  imageUri: remoteUri,
-                },
-              },
-            });
-          } else {
-            if (point.id) {
-              firestore.getNoteRef(noteId).update({
+            if (imageUri) {
+              const remoteUri = await uploadPhoto(
+                imageUri,
+                uid,
+                noteId,
+                point.id,
+              );
+              await firestore.getNoteRef(noteId).update({
                 points: {
-                  [point.id]: point,
+                  [point.id]: {
+                    ...point,
+                    imageUri: remoteUri,
+                  },
                 },
               });
+            } else {
+              if (point.id) {
+                firestore.getNoteRef(noteId).update({
+                  points: {
+                    [point.id]: point,
+                  },
+                });
+              }
             }
           }
         }
-      }
 
-      const newSyncDate = new Date().getTime();
-      userRef.update({
-        syncDate: newSyncDate,
-      });
-      dispatch({
-        type: types.SYNC_DATA,
-        payload: {
-          syncDate: newSyncDate,
-        },
-      });
-    } else {
-      const newSyncDate = new Date().getTime();
-      if (netState.isConnected) {
-        listenNotes()(dispatch, getState);
-
-        userRef.set({
+        const newSyncDate = new Date().getTime();
+        userRef.update({
           syncDate: newSyncDate,
         });
+        dispatch({
+          type: types.SYNC_DATA,
+          payload: {
+            syncDate: newSyncDate,
+          },
+        });
+      } else {
+        const newSyncDate = new Date().getTime();
+        if (netState.isConnected) {
+          listenNotes()(dispatch, getState);
+
+          userRef.set({
+            syncDate: newSyncDate,
+          });
+        }
+        dispatch({
+          type: types.SYNC_DATA,
+          payload: {
+            syncDate: newSyncDate,
+          },
+        });
       }
-      dispatch({
-        type: types.SYNC_DATA,
-        payload: {
-          syncDate: newSyncDate,
-        },
-      });
-    }
-  } catch (error) {
-    reactotron.log(error.message);
+    } catch (error) {}
   }
 };
 
@@ -288,13 +297,20 @@ export const removeNote = (noteId: string): AppThunk => async (
   }
 };
 
-export const logOut = (): AppThunk => async (dispatch) => {
-  try {
+export const logOut = (): AppThunk => async (dispatch, getState) => {
+  const { user } = getState().app;
+  if (user === globals.guest) {
     dispatch({
-      type: types.LOG_OUT,
+      type: types.LOG_OUT_GUEST,
     });
-    firebase.auth().signOut();
-  } catch (error) {
-    console.log(error);
+  } else {
+    try {
+      dispatch({
+        type: types.LOG_OUT,
+      });
+      firebase.auth().signOut();
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
