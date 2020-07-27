@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Todo app",
-    "slug": "TodoApp",
+    "slug": "firebase_todo_portfolio_app",
     "privacy": "public",
     "platforms": ["ios", "android"],
     "version": "1.0.0",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#f5f5f5"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,11 +21,13 @@
       "translucent": true
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
-      "package": "mati.todo.app",
+      "package": "napieralski.mateusz.firebasetodo",
       "versionCode": 1
-    }
+    },
+    "description": "Firebase todo application",
+    "githubUrl": "https://github.com/matiNap/WorkoutApp"
   }
 }
